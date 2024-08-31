@@ -6,11 +6,13 @@ import { encryptTransform } from "redux-persist-transform-encrypt";
 import { userSlice } from "@/features/user/user-slice";
 import { settingsSlice } from "@/features/settings/settings-slice";
 import { eggCountingApparatusSlice } from "@/features/egg-counting-apparatus/egg-counting-apparatus-slice";
+import { authSlice } from "@/features/auth/auth-slice";
 
 const reducer = combineReducers({
     user: userSlice.reducer,
     settings: settingsSlice.reducer,
     eggCountingApparatus: eggCountingApparatusSlice.reducer,
+    authLocal: authSlice.reducer,
 });
 
 const persistedReducer = persistReducer(

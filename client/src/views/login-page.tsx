@@ -5,7 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChromeIcon } from "lucide-react";
 import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
-
+import { useAuth } from "@/hooks/useAuth";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "@/app/hooks";
+import { setStep } from "@/features/auth/auth-slice";
 export const LoginPage = () => {
     return (
         <>
@@ -32,38 +35,55 @@ const CheckIcon = () => (
 )
 
 export const LoginForm = () => {
-    const [step, setStep] = useState(1)
+    // const [step, setStep] = useState(1)
     const [pin, setPin] = useState('')
     const [confirmPin, setConfirmPin] = useState('')
     const [error, setError] = useState('')
     const [countdown, setCountdown] = useState(3)
     const navigate = useNavigate();
+    const { loginWithGoogle } = useAuth();
+
+
+    const step = useAppSelector((state) => state.reducer.authLocal?.step ?? 1);
+    const dispatch = useDispatch();
+
     useEffect(() => {
         if (step === 3) {
-        const timer = setInterval(() => {
-            setCountdown((prev) => prev - 1)
-        }, 1000)
-        return () => clearInterval(timer)
-        } 
-        if (countdown === 0) {
-        setStep(1)
-        setCountdown(3)
-            navigate('')
+            const timer = setInterval(() => {
+                setCountdown((prev) => prev - 1);
+            }, 1000);
+    
+            if (countdown === 0) {
+                dispatch(setStep(1));
+                navigate('');
+            }
+    
+            return () => clearInterval(timer);
         }
-    }, [step])
+    }, [step, countdown, dispatch, navigate]);
 
     const handlePinSubmit = () => {
         if (pin === confirmPin && pin.length === 4) {
-        setStep(2)
-        setError('')
+            dispatch(setStep(2))
+            setError('')
         } else {
         setError('PINs do not match or are not 4 digits long')
         }
     }
 
-    const handleGoogleSignIn = () => {
+    const handleGoogleSignIn = async () => {
         // Mock Google sign-in
-        setTimeout(() => setStep(3), 1000)
+        try {
+            console.log("test")
+            await loginWithGoogle();
+            // setTimeout(() => setStep(3), 1000)
+
+        } catch(error: unknown) {
+            if(error instanceof Error)
+                console.log(error.message);
+            else
+                console.log(error);
+        }
     }
 
     const fadeInOut = {
