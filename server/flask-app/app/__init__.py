@@ -16,5 +16,4 @@ def create_app():
 
     # Register the main Blueprint for routes
     app.register_blueprint(main)
-
     return app
