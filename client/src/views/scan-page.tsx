@@ -1,0 +1,199 @@
+import { Button } from "@/components/ui/button";
+import { AnimatePresence, motion } from "framer-motion";
+import { Settings } from "./settings-page";
+import { useState, useEffect } from "react";
+import { SettingsButton } from "../components/settings-button";
+import { Label } from "@radix-ui/react-label";
+import { WebCamComponent } from "@/components/webcam";
+import { useAppSelector } from "@/app/hooks";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
+export const ScanPage = () => {
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [isCameraOn, setIsCameraOn] = useState(false);
+    const [isAlertOpen, setIsAlertOpen] = useState(false);
+    const language = useAppSelector((state) => state.reducer.settings?.language);
+
+    useEffect(() => {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(() => {
+                setIsCameraOn(true);
+            })
+            .catch(() => {
+                setIsCameraOn(false);
+            });
+    }, []);
+
+    const handleCameraPermission = () => {
+        navigator.mediaDevices
+            .getUserMedia({ video: true })
+            .then(() => {
+                setIsCameraOn(true);
+            })
+            .catch(() => {
+                alert("Please allow camera permissions to continue.");
+                setIsCameraOn(false);
+            });
+    };
+
+    const handleConfirm = () => {
+        setIsAlertOpen(true);
+    };
+
+    return (
+        <div className="flex h-screen bg-background overflow-hidden">
+            <SettingsButton onClick={() => setIsSettingsOpen(!isSettingsOpen)} isOpen={isSettingsOpen} />
+            <AnimatePresence initial={false}>
+                <motion.div
+                    key="content"
+                    initial={{ x: isSettingsOpen ? "100%" : 0 }}
+                    animate={{ x: 0 }}
+                    exit={{ x: "100%" }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    className={`flex flex-col md:flex-row w-full md:h-full h-1/5  bg-black/10`}
+                    style={{ position: isSettingsOpen ? "absolute" : "relative", right: 0 }}
+                >
+                    {/* Left view (form) */}
+                    <div className="ml-4 flex-1 flex flex-col p-8 backdrop-blur-sm ">
+                        <div className="mb-6">
+                            <h1 className="text-3xl font-bold">{language === "english" ? "Insert Egg Tray" : "Ibutang ang Egg Tray"}</h1>
+                        </div>
+                        <div className="space-y-6 max-w-md">
+                            <div>
+                                <Label htmlFor="layerHouse">Layer House</Label>
+                                <select
+                                    id="layerHouse"
+                                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm rounded-md"
+                                    defaultValue="layer1"
+                                >
+                                    <option value="layer1">Layer House 1</option>
+                                    <option value="layer2">Layer House 2</option>
+                                    <option value="layer3">Layer House 3</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <Label htmlFor="size">Size</Label>
+                                <select
+                                    id="size"
+                                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm rounded-md"
+                                    defaultValue="small"
+                                >
+                                    <option value="small">Small</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="large">Large</option>
+                                    <option value="xlarge">Extra Large</option>
+                                    <option value="jumbo">Jumbo</option>
+                                </select>
+                            </div>
+
+                            <Button className="w-full" onClick={handleConfirm}>
+                                {language === "english" ? "Confirm" : "Kompirma"}
+                            </Button>
+                        </div>
+                    </div>
+
+                    {/* Right view (WebCamComponent) */}
+                    <div className="flex-1 bg-muted h-1/2 md:h-full relative">
+                        <div className="camera_component h-full object-cover bg-black flex items-center justify-center">
+                            {isCameraOn ? (
+                                <WebCamComponent />
+                            ) : (
+                                <div className="text-white text-center">
+                                    <p className="mb-4">Camera is off</p>
+                                    <Button onClick={handleCameraPermission}>
+                                        Turn on camera
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
+                        {!isCameraOn && (
+                            <div
+                                className="absolute top-4 right-4 bg-red-500 text-white p-2 rounded-full cursor-pointer"
+                                onClick={handleCameraPermission}
+                            >
+                                <CameraOffIcon className="h-6 w-6" />
+                            </div>
+                        )}
+                    </div>
+                </motion.div>
+
+                {isSettingsOpen && (
+                    <motion.div
+                        key="settings"
+                        initial={{ x: "-100%" }}
+                        animate={{ x: 0 }}
+                        exit={{ x: "-100%" }}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        className="absolute inset-0 bg-background z-40"
+                    >
+                        <Settings />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+            
+            {/* <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Logged Succesfully!</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Printing QR...
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                </AlertDialogContent>
+            </AlertDialog> */}
+
+            {/* <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>  
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Print Successful!</AlertDialogTitle>
+                    </AlertDialogHeader>
+                </AlertDialogContent>
+            </AlertDialog> */}
+
+            <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Log Unsuccessful</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Please Try Again.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogAction onClick={() => setIsAlertOpen(false)}>Okay</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </div>
+    );
+};
+
+function CameraOffIcon(props: React.SVGProps<SVGSVGElement>) {
+    return (
+        <svg
+            {...props}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <line x1="2" x2="22" y1="2" y2="22" />
+            <path d="M7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16" />
+            <path d="M9.5 4h5L17 7h3a2 2 0 0 1 2 2v7.5" />
+            <path d="M14.121 15.121A3 3 0 1 1 9.88 10.88" />
+        </svg>
+    );
+}

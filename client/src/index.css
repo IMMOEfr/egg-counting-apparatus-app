@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+  
+
+.camera_component {
+    width: 100%;
+    background-color: brown;
+    height: 100%;
+}
