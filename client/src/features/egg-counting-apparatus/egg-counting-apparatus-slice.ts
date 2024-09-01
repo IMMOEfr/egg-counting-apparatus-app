@@ -67,5 +67,3 @@ export const eggCountingApparatusSlice = createSlice({
 // Export the actions generated from the slice
 export const { setEggCountingApparatusID, addEggtray, clearEggtray } = eggCountingApparatusSlice.actions;
 export default eggCountingApparatusSlice.reducer;
-
-

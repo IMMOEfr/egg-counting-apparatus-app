@@ -1,3 +1,4 @@
+```
 my_flask_app/
 │
 ├── app/
@@ -12,7 +13,7 @@ my_flask_app/
 ├── run.py
 │
 └── requirements.txt
-
+```
 
 import json
 import subprocess

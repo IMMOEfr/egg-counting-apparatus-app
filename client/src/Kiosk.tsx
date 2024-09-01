@@ -16,6 +16,7 @@ import { Input } from "./components/ui/input";
 import { Button } from "./components/ui/button";
 import { useEffect, useRef } from "react";
 import { setEggCountingApparatusID } from "./features/egg-counting-apparatus/egg-counting-apparatus-slice";
+import { WebcamProvider } from "./lib/webcam-provider";
 // APP
 function App() {
   const dispatch = useDispatch();
@@ -36,15 +37,17 @@ function App() {
       )
       :
       (
-        <Router>
+        <WebcamProvider>
           <Toaster />
-          <Routes>
-            <Route path = {MENU_ROUTE} element = {<MenuPage />} />
-            <Route path = {HOME_ROUTE} element = {<ScanPage />} />
-            <Route path = {TEST_ROUTE} element = {<TestPage />} />
-            <Route path = "*" element = {<h1>Not Found</h1>} />
-          </Routes>
-        </Router>
+          <Router>
+            <Routes>
+              <Route path = {MENU_ROUTE} element = {<MenuPage />} />
+              <Route path = {HOME_ROUTE} element = {<ScanPage />} />
+              <Route path = {TEST_ROUTE} element = {<TestPage />} />
+              <Route path = "*" element = {<h1>Not Found</h1>} />
+            </Routes>
+          </Router>
+        </WebcamProvider>
       )}
     </>
   );

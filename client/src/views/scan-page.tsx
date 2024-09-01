@@ -1,11 +1,3 @@
-import { Button } from "@/components/ui/button";
-import { AnimatePresence, motion } from "framer-motion";
-import { Settings } from "./settings-page";
-import { useState, useEffect } from "react";
-import { SettingsButton } from "../components/settings-button";
-import { Label } from "@radix-ui/react-label";
-import { WebCamComponent } from "@/components/webcam";
-import { useAppSelector } from "@/app/hooks";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,13 +7,31 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { AnimatePresence, motion } from "framer-motion";
+import { Settings } from "./settings-page";
+import { useState, useEffect } from "react";
+import { SettingsButton } from "../components/settings-button";
+import { Label } from "@radix-ui/react-label";
+import { WebCamComponent } from "@/components/webcam";
+import { useAppSelector } from "@/app/hooks";
+import { useDispatch } from "react-redux";
+import { useWebcamContext } from "@/lib/webcam-provider";
+import { setPicture } from "@/features/camera/camera-slice";
+import { useToast } from "@/components/ui/use-toast";
+import axios from "axios";
+
 
 export const ScanPage = () => {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isCameraOn, setIsCameraOn] = useState(false);
     const [isAlertOpen, setIsAlertOpen] = useState(false);
+    const { webcamRef, canvasRef } = useWebcamContext() || {};
     const language = useAppSelector((state) => state.reducer.settings?.language);
-
+    const picture = useAppSelector((state) => state.reducer.camera?.picture);
+    const dispatch = useDispatch();
+    const { toast } = useToast();
+    
     useEffect(() => {
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(() => {
@@ -44,8 +54,95 @@ export const ScanPage = () => {
             });
     };
 
-    const handleConfirm = () => {
-        setIsAlertOpen(true);
+    const handleConfirm = async () => { 
+        try {
+            // Capture the image            
+            if (webcamRef && canvasRef) {
+                const screenshot = webcamRef.current?.getScreenshot();
+                if (screenshot) {
+                    const image = new Image();
+                    image.src = screenshot;
+                    image.onload = () => {
+                        const canvas = canvasRef.current;
+                        if (canvas) {
+                            const context = canvas.getContext("2d");
+                            if (context) {
+                                canvas.width = image.width;
+                                canvas.height = image.height;
+                                context.drawImage(image, 0, 0);
+                                canvas.toBlob((blob: Blob) => {
+                                    if (blob) {
+                                        const reader = new FileReader();
+                                        reader.onloadend = () => {
+                                            const base64data = reader.result as string;
+                                            dispatch(setPicture(base64data));  // Save Base64 image to Redux state
+                                        };
+                                        reader.readAsDataURL(blob);  // Convert blob to Base64
+                                    }
+                                }, "image/jpeg");
+                            }
+                        }
+                    };
+                }
+            }
+    
+            if (picture) {
+                // console.log("picture:", picture);
+    
+                // Prepare FormData with the Base64 image string
+                const byteString = atob(picture.split(',')[1]);
+                const mimeString = picture.split(',')[0].split(':')[1].split(';')[0];
+                const arrayBuffer = new ArrayBuffer(byteString.length);
+                const uint8Array = new Uint8Array(arrayBuffer);
+    
+                for (let i = 0; i < byteString.length; i++) {
+                    uint8Array[i] = byteString.charCodeAt(i);
+                }
+    
+                const imageBlob = new Blob([arrayBuffer], { type: mimeString });
+    
+                // Prepare FormData with the image blob
+                const formData = new FormData();
+                formData.append('image', imageBlob, 'egg_image.jpg');
+    
+                // const res = await axios.post("http://127.0.0.1:1110/count_eggs_test", formData, {
+                // Send the image to the backend
+                const res = await axios.post("http://127.0.0.1:1110/count_eggs", formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+
+                // // getting the image from the other axios api 
+                // const res2 = await axios.post("http://127.0.0.1:1110/count_eggs_test", formData, {
+                //     headers: {
+                //         'Content-Type': 'multipart/form-data'
+                //     }
+                // });
+                // // converting res2 to base64
+                // console.log(res2);
+                // // console.log(base64);
+
+
+    
+                console.log(res.data);
+    
+                // Display success toast
+                toast({
+                    title: "Success",
+                    className: "bg-green-500 text-white",
+                    description: `Eggs counted successfully!`,
+                    duration: 4000
+                });
+            }
+        } catch(error: unknown) {
+            if (error instanceof Error) {
+                console.error(error.message);
+            } else {
+                console.error(error);
+            }
+            setIsAlertOpen(true)
+        } 
     };
 
     return (
@@ -197,3 +294,14 @@ function CameraOffIcon(props: React.SVGProps<SVGSVGElement>) {
         </svg>
     );
 }
+// 
+
+// export const SomeComponent = () => {
+//     const picture = useAppSelector((state) => state.camera.picture);
+
+//     return (
+//         <div>
+//             {picture && <img src={picture} alt="Captured" />}
+//         </div>
+//     );
+// };

@@ -7,12 +7,14 @@ import { userSlice } from "@/features/user/user-slice";
 import { settingsSlice } from "@/features/settings/settings-slice";
 import { eggCountingApparatusSlice } from "@/features/egg-counting-apparatus/egg-counting-apparatus-slice";
 import { authSlice } from "@/features/auth/auth-slice";
+import { cameraSlice } from "@/features/camera/camera-slice";
 
 const reducer = combineReducers({
     user: userSlice.reducer,
     settings: settingsSlice.reducer,
     eggCountingApparatus: eggCountingApparatusSlice.reducer,
     authLocal: authSlice.reducer,
+    camera: cameraSlice.reducer,
 });
 
 const persistedReducer = persistReducer(
