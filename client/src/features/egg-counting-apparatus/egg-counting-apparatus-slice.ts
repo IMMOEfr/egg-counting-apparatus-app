@@ -5,7 +5,7 @@ export interface Eggtray {
     layer: string;
     eggSize: string;
     eggCount: number;
-    time: string;
+    timeStamp: string;
     date: string;
 };
 

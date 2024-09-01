@@ -19,8 +19,9 @@ import { useDispatch } from "react-redux";
 import { useWebcamContext } from "@/lib/webcam-provider";
 import { setPicture } from "@/features/camera/camera-slice";
 import { useToast } from "@/components/ui/use-toast";
+import { useEggTray } from "@/hooks/useEggTray";
+import { addEggtray } from "@/features/egg-counting-apparatus/egg-counting-apparatus-slice";
 import axios from "axios";
-
 
 export const ScanPage = () => {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -31,7 +32,9 @@ export const ScanPage = () => {
     const picture = useAppSelector((state) => state.reducer.camera?.picture);
     const dispatch = useDispatch();
     const { toast } = useToast();
-    
+    const { prepareForFirebase, startTimer, endTimer, formatDuration } = useEggTray();
+
+
     useEffect(() => {
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(() => {
@@ -100,33 +103,79 @@ export const ScanPage = () => {
                 }
     
                 const imageBlob = new Blob([arrayBuffer], { type: mimeString });
-    
+                
                 // Prepare FormData with the image blob
                 const formData = new FormData();
                 formData.append('image', imageBlob, 'egg_image.jpg');
-    
-                // const res = await axios.post("http://127.0.0.1:1110/count_eggs_test", formData, {
-                // Send the image to the backend
+                const startTime = startTimer();
+                
+                // Step 1: Count the Eggs in an egg tray
                 const res = await axios.post("http://127.0.0.1:1110/count_eggs", formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
+                
+                
 
-                // // getting the image from the other axios api 
-                // const res2 = await axios.post("http://127.0.0.1:1110/count_eggs_test", formData, {
-                //     headers: {
-                //         'Content-Type': 'multipart/form-data'
-                //     }
-                // });
-                // // converting res2 to base64
-                // console.log(res2);
-                // // console.log(base64);
+                // Step 3: Format the data:
+                //      layhouse, eggSize, eggCount,
+                //      date, bestByDate, timeStamp,
+                //      firebaseUrl ""
 
+                const layer = document.getElementById("layerHouse") as HTMLSelectElement;
+                const size = document.getElementById("size") as HTMLSelectElement;
+                const success = await prepareForFirebase(layer.value, size.value, res.data.count);
+                if(!success) throw new Error("Failed to log the egg tray.");
+                const endTime = endTimer(startTime);
+                const durationInSeconds = formatDuration(endTime, "seconds");
+                const durationInMS = formatDuration(endTime, "milliseconds");
 
-    
-                console.log(res.data);
-    
+                console.log(
+                    `Logged Egg Tray: ${layer.value}, ${size.value}, ${res.data.eggCount} eggs, ${durationInSeconds} (${durationInMS})`
+                );
+
+                
+
+                // Step 2: Save the data to the Redux store
+                
+                // Update Redux store
+                
+                
+                // dispatch(addEggtray({
+                //     layer: layer.value,
+                //     eggSize: size.value,
+                //     eggCount: res.data.eggCount,
+                //     date: new Date().toLocaleDateString(),
+                //     // bestByDate: new Date(new Date().setDate(new Date().getDate() + 30)).toLocaleDateString(),
+                //     timeStamp: new Date().toLocaleTimeString(),
+                //     id: Math.floor(Math.random() * 1000),
+                //     // firebaseUrl: ""
+                // }));
+                
+                // Step 4: Classify the eggs into sizes
+                // Step 4.1: Format Prediction Data:
+                //        referenceTrayID, 
+                //        eggSize,
+                //         [  ][][][][][]
+                //         [  ][][][][][]
+                //         [  ][][][][][]       ^
+                //         [  ][][][][][]       |
+                //         [^>][][][][][]       |
+                // 5x6
+                // Size Excepted
+                
+
+                // Step 5: CRUD OPERATION TIMER STUFF
+                // Step 5.1: Send to firebase to retrieve 
+                // the Document ID of the Egg Tray
+                // Step 5.2: Log the Crud Operation into
+                // collection
+
+                // Step 6: Generate QR Code (a unique url to firebase)
+                
+                // Step 7: Print QR Code
+                
                 // Display success toast
                 toast({
                     title: "Success",

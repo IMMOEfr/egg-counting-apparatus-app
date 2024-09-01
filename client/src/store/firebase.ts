@@ -29,3 +29,8 @@ export const googleProvider = new GoogleAuthProvider();
 
 // Collections
 export const usersRef = collection(db, 'users');
+export const crudRef = collection(db, 'crudCollection');
+export const eggTrayRef = collection(db, 'eggTray');
+export const eggCountingApparatusRef = collection(db, 'eggCountingApparatus');
+export const organizationsRef = collection(db, 'organizations');
+export const dataCollectionRef = collection(db, 'dataCollection');
