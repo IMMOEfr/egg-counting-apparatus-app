@@ -10,7 +10,7 @@ export interface Eggtray {
 };
 
 export interface EggCountingApparatusState {
-    machineUID: string;
+    eggCountingApparatusID: string;
     Eggtrays: Eggtray[];
     map_of_counts: {
         [key: string]: number;
@@ -20,7 +20,7 @@ export interface EggCountingApparatusState {
 
 // Define the initial state
 const initialState: EggCountingApparatusState = {
-    machineUID: "",
+    eggCountingApparatusID: "undefined",
     Eggtrays: [],
     map_of_counts: {
         "S": 0,
@@ -44,8 +44,8 @@ export const eggCountingApparatusSlice = createSlice({
     name: "eggCountingApparatus",
     initialState,
     reducers: {
-        setMachineUID: (state, action: PayloadAction<string>) => {
-            state.machineUID = action.payload;
+        setEggCountingApparatusID: (state, action: PayloadAction<string>) => {
+            state.eggCountingApparatusID = action.payload;
         },
         addEggtray: (state, action: PayloadAction<Eggtray>) => {
             state.Eggtrays.push(action.payload);
@@ -65,7 +65,7 @@ export const eggCountingApparatusSlice = createSlice({
 });
 
 // Export the actions generated from the slice
-export const { setMachineUID, addEggtray, clearEggtray } = eggCountingApparatusSlice.actions;
+export const { setEggCountingApparatusID, addEggtray, clearEggtray } = eggCountingApparatusSlice.actions;
 export default eggCountingApparatusSlice.reducer;
 
 

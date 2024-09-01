@@ -9,10 +9,28 @@ import { useAuth } from "@/hooks/useAuth";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/app/hooks";
 import { setStep } from "@/features/auth/auth-slice";
+import { HOME_ROUTE } from "@/lib/routes";
 export const LoginPage = () => {
+    const { logout } = useAuth();
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+            console.log("done bitch!")
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.log("Error: ", error.message);
+            } else {
+                console.log("Internal server error");
+            }
+        }
+    };
     return (
         <>
             <LoginForm />
+            <Button onClick = {handleLogout}>
+                Sign Out
+            </Button>
         </>
     );
 };
@@ -35,7 +53,6 @@ const CheckIcon = () => (
 )
 
 export const LoginForm = () => {
-    // const [step, setStep] = useState(1)
     const [pin, setPin] = useState('')
     const [confirmPin, setConfirmPin] = useState('')
     const [error, setError] = useState('')
@@ -43,10 +60,11 @@ export const LoginForm = () => {
     const navigate = useNavigate();
     const { loginWithGoogle } = useAuth();
 
-
     const step = useAppSelector((state) => state.reducer.authLocal?.step ?? 1);
     const dispatch = useDispatch();
-
+    // const tempPin = useAppSelector((state) => state.reducer.authLocal?.pin ?? "1234");
+    // const eggCountingApparatusID = useAppSelector((state) => state.reducer.eggCountingApparatus?.eggCountingApparatusID);
+    // console.log(eggCountingApparatusID);
     useEffect(() => {
         if (step === 3) {
             const timer = setInterval(() => {
@@ -55,7 +73,7 @@ export const LoginForm = () => {
     
             if (countdown === 0) {
                 dispatch(setStep(1));
-                navigate('');
+                navigate(HOME_ROUTE);
             }
     
             return () => clearInterval(timer);

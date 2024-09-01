@@ -10,7 +10,7 @@ interface AuthState {
 // Define the initial state using that type
 const initialState: AuthState = {
     step: 1,
-    pin: "",
+    pin: "1234",
     firstVisit: true,
 };
 
