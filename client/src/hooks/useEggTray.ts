@@ -1,5 +1,5 @@
 import { useToast } from "@/components/ui/use-toast";
-import { Eggtray } from "@/features/egg-counting-apparatus/egg-counting-apparatus-slice";
+import { addEggtray, Eggtray } from "@/features/egg-counting-apparatus/egg-counting-apparatus-slice";
 import { useDispatch } from "react-redux";
 import { auth, db, eggTrayRef, crudRef } from "@/store/firebase";
 import { addDoc, doc, setDoc, updateDoc } from "firebase/firestore";
@@ -114,7 +114,8 @@ export const useEggTray = () => {
 
     const updateReduxStore = (eggTray: Eggtray) => {
         try {
-
+            // updating redux of the egg counting apparatus
+            dispatch(addEggtray(eggTray));
         } catch(error: unknown) {
             if(error instanceof Error) {
                 toast({

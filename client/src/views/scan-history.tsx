@@ -16,7 +16,7 @@ import {
 //   layer: string
 //   eggSize: string
 //   eggCount: number
-//   time: string
+//   timeStamp: string
 //   date: string
 // 
 
@@ -27,7 +27,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 1",
     eggSize: "S",
     eggCount: 30,
-    time: "13:35",
+    timeStamp: "13:35",
     date: "08/31/2024"
   },
   {
@@ -35,7 +35,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 1",
     eggSize: "M",
     eggCount: 30,
-    time: "13:36",
+    timeStamp: "13:36",
     date: "08/31/2024"
   },
   {
@@ -43,7 +43,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 1",
     eggSize: "L",
     eggCount: 28,
-    time: "13:37",
+    timeStamp: "13:37",
     date: "08/31/2024"
 },
 {
@@ -51,7 +51,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 2",
     eggSize: "M",
     eggCount: 32,
-    time: "13:38",
+    timeStamp: "13:38",
     date: "08/31/2024"
 },
 {
@@ -59,7 +59,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 2",
     eggSize: "S",
     eggCount: 29,
-    time: "13:39",
+    timeStamp: "13:39",
     date: "08/31/2024"
 },
 {
@@ -67,7 +67,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 3",
     eggSize: "M",
     eggCount: 33,
-    time: "13:40",
+    timeStamp: "13:40",
     date: "08/31/2024"
 },
 {
@@ -75,7 +75,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 3",
     eggSize: "L",
     eggCount: 27,
-    time: "13:41",
+    timeStamp: "13:41",
     date: "08/31/2024"
 },
 {
@@ -83,7 +83,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 4",
     eggSize: "S",
     eggCount: 31,
-    time: "13:42",
+    timeStamp: "13:42",
     date: "08/31/2024"
 },
 {
@@ -91,7 +91,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 4",
     eggSize: "M",
     eggCount: 30,
-    time: "13:43",
+    timeStamp: "13:43",
     date: "08/31/2024"
 },
 {
@@ -99,7 +99,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 5",
     eggSize: "L",
     eggCount: 29,
-    time: "13:44",
+    timeStamp: "13:44",
     date: "08/31/2024"
 },
 {
@@ -107,7 +107,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 5",
     eggSize: "M",
     eggCount: 28,
-    time: "13:45",
+    timeStamp: "13:45",
     date: "08/31/2024"
 },
 {
@@ -115,7 +115,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 6",
     eggSize: "S",
     eggCount: 30,
-    time: "13:46",
+    timeStamp: "13:46",
     date: "08/31/2024"
 },
 {
@@ -123,7 +123,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 6",
     eggSize: "M",
     eggCount: 31,
-    time: "13:47",
+    timeStamp: "13:47",
     date: "08/31/2024"
 },
 {
@@ -131,7 +131,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 7",
     eggSize: "L",
     eggCount: 32,
-    time: "13:48",
+    timeStamp: "13:48",
     date: "08/31/2024"
 },
 {
@@ -139,7 +139,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 7",
     eggSize: "S",
     eggCount: 28,
-    time: "13:49",
+    timeStamp: "13:49",
     date: "08/31/2024"
 },
 {
@@ -147,7 +147,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 8",
     eggSize: "M",
     eggCount: 33,
-    time: "13:50",
+    timeStamp: "13:50",
     date: "08/31/2024"
 },
 {
@@ -155,7 +155,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 8",
     eggSize: "L",
     eggCount: 30,
-    time: "13:51",
+    timeStamp: "13:51",
     date: "08/31/2024"
 },
 {
@@ -163,7 +163,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 9",
     eggSize: "M",
     eggCount: 29,
-    time: "13:52",
+    timeStamp: "13:52",
     date: "08/31/2024"
 },
 {
@@ -171,7 +171,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 9",
     eggSize: "S",
     eggCount: 32,
-    time: "13:53",
+    timeStamp: "13:53",
     date: "08/31/2024"
 },
 {
@@ -179,7 +179,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 10",
     eggSize: "L",
     eggCount: 31,
-    time: "13:54",
+    timeStamp: "13:54",
     date: "08/31/2024"
 },
 {
@@ -187,7 +187,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 10",
     eggSize: "M",
     eggCount: 28,
-    time: "13:55",
+    timeStamp: "13:55",
     date: "08/31/2024"
 },
 {
@@ -195,7 +195,7 @@ const historyItems: Eggtray[] = [
     layer: "Layer House 11",
     eggSize: "S",
     eggCount: 30,
-    time: "13:56",
+    timeStamp: "13:56",
     date: "08/31/2024"
 }
 
@@ -223,7 +223,7 @@ const HistoryCard = ({ historyItem }: HistoryProps) => {
         <p><span className="font-medium">Egg Size:</span> {historyItem.eggSize}</p>
         <p><span className="font-medium">Egg Count:</span> {historyItem.eggCount}</p>
         <p><span className="font-medium">Date:</span> {historyItem.date}</p>
-        <p><span className="font-medium">Time:</span> {historyItem.time}</p>
+        <p><span className="font-medium">timeStamp:</span> {historyItem.time}</p>
       </div>
     </motion.div>
   )
@@ -239,8 +239,8 @@ export const HistoryPage = () => {
     const lowercasedSearchTerm = searchTerm.toLowerCase().trim()
     return historyItems
       .sort((a, b) => {
-        const dateA = new Date(`${a.date} ${a.time}`);
-        const dateB = new Date(`${b.date} ${b.time}`);
+        const dateA = new Date(`${a.date} ${a.timeStamp}`);
+        const dateB = new Date(`${b.date} ${b.timeStamp}`);
         return dateB.getTime() - dateA.getTime();
       })
       .filter(item =>
